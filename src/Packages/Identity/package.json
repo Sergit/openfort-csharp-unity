@@ -1,0 +1,25 @@
+{
+  "name": "com.portal.identity",
+  "version": "0.0.1",
+  "description": "The Portal SDK for Unity helps you integrate your game with Portal Identity.",
+  "displayName": "Portal Identity",
+  "scopedRegistries": [
+    {
+      "name": "Open UPM Packages",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.cysharp.unitask"
+      ]
+    }
+  ],
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.2.0",
+    "com.cysharp.unitask": "2.3.3"
+  },
+  "keywords": [
+    "unity",
+    "portal",
+    "identity"
+  ],
+  "unity": "2021.3"
+}

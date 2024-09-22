@@ -20,8 +20,10 @@
         "VoltRpc.dll",
         "Newtonsoft.Json.dll"
     ],
-    "autoReferenced": true,
-    "defineConstraints": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN"
+    ],
     "versionDefines": [
         {
             "name": "com.unity.textmeshpro",

@@ -2,9 +2,6 @@
 // Copyright (c) 2021-2022 Voltstro-Studios
 // 
 // This project is under the MIT license. See the LICENSE.md file for more details.
-
-#if UNITY_EDITOR && UNITY_STANDALONE_WIN
-
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,6 +24,10 @@ namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
             if (report.summary.result is BuildResult.Failed or BuildResult.Cancelled)
                 return;
 
+            if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.StandaloneWindows &&
+                EditorUserBuildSettings.activeBuildTarget != BuildTarget.StandaloneWindows64)
+                return;
+
             string buildFullOutputPath = report.summary.outputPath;
             string buildAppName = Path.GetFileNameWithoutExtension(buildFullOutputPath);
             string buildOutputPath = Path.GetDirectoryName(buildFullOutputPath);
@@ -45,7 +46,7 @@ namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
             }
 
             //UWB folder in the data folder
-            string buildUwbPath = $"{buildDataPath}/PortalSDK/Runtime/UWB/";
+            string buildUwbPath = $"{buildDataPath}/OpenfortSDK/Runtime/UWB/";
 
             //Make sure it exists
             DirectoryInfo buildUwbInfo = new(buildUwbPath);
@@ -114,5 +115,3 @@ namespace VoltstroStudios.UnityWebBrowser.Editor.EngineManagement
         }
     }
 }
-
-#endif

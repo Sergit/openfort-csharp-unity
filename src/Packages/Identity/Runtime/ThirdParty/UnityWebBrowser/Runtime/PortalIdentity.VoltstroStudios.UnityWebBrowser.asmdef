@@ -1,5 +1,5 @@
 {
-    "name": "VoltstroStudios.UnityWebBrowser",
+    "name": "PortalIdentity.VoltstroStudios.UnityWebBrowser",
     "rootNamespace": "VoltstroStudios.UnityWebBrowser",
     "references": [
         "UniTask",

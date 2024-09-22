@@ -2,10 +2,10 @@
     "name": "Portal.Identity.Runtime.Private",
     "rootNamespace": "Portal.Identity",
     "references": [
-        "VoltstroStudios.UnityWebBrowser",
+        "PortalIdentity.VoltstroStudios.UnityWebBrowser",
         "UniTask",
         "Portal.Browser.Core",
-        "unity-webview"
+        "portal-identity-unity-webview"
     ],
     "includePlatforms": [
         "Android",

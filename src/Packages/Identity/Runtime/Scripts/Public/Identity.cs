@@ -3,10 +3,10 @@ using System;
 #if UNITY_STANDALONE_WIN || (UNITY_ANDROID && UNITY_EDITOR_WIN) || (UNITY_IPHONE && UNITY_EDITOR_WIN)
 using VoltstroStudios.UnityWebBrowser.Core;
 #else
-using Portal.Browser.Gree;
+using Openfort.Browser.Gree;
 #endif
 using Portal.Identity.Event;
-using Portal.Browser.Core;
+using Openfort.Browser.Core;
 using Portal.Identity.Model;
 using Portal.Identity.Core;
 using Cysharp.Threading.Tasks;

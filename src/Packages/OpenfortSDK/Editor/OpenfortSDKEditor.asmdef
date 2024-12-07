@@ -1,7 +1,9 @@
 {
     "name": "Openfort.OpenfortSDK.Editor",
     "rootNamespace": "Openfort.OpenfortSDK.Editor",
-    "references": [],
+    "references": [
+        "Openfort.Common.Editor"
+    ],
     "includePlatforms": [
         "Editor"
     ],

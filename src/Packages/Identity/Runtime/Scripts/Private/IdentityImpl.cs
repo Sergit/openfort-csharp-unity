@@ -600,7 +600,6 @@ namespace Portal.Identity
         }
 #endif
 
-#if (UNITY_IPHONE && !UNITY_EDITOR) || (UNITY_ANDROID && !UNITY_EDITOR)
         public void ClearCache(bool includeDiskFiles)
         {
             communicationsManager.ClearCache(includeDiskFiles);
@@ -610,8 +609,6 @@ namespace Portal.Identity
         {
             communicationsManager.ClearStorage();
         }
-#endif
-
     }
 
 #if UNITY_ANDROID

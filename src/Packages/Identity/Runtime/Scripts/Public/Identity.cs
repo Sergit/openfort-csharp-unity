@@ -1,8 +1,12 @@
-using System.Collections.Generic;
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+#define OPENFORT_USE_UWB
+#elif UNITY_WEBGL || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
+#define OPENFORT_USE_GREE
+#endif
 using System;
-#if UNITY_STANDALONE_WIN || (UNITY_ANDROID && UNITY_EDITOR_WIN) || (UNITY_IPHONE && UNITY_EDITOR_WIN)
+#if OPENFORT_USE_UWB
 using VoltstroStudios.UnityWebBrowser.Core;
-#else
+#elif OPENFORT_USE_GREE
 using Openfort.Browser.Gree;
 #endif
 using Portal.Identity.Event;
@@ -21,12 +25,7 @@ namespace Portal.Identity
 
         public static Identity Instance { get; private set; }
 
-#if UNITY_STANDALONE_WIN || (UNITY_ANDROID && UNITY_EDITOR_WIN) || (UNITY_IPHONE && UNITY_EDITOR_WIN)
-        private readonly IWebBrowserClient webBrowserClient = new WebBrowserClient();
-#else
-        private readonly IWebBrowserClient webBrowserClient = new GreeBrowserClient();
-#endif
-
+        private IWebBrowserClient webBrowserClient;
         // Keeps track of the latest received deeplink
         private static string deeplink = null;
         private static bool readySignalReceived = false;
@@ -36,9 +35,8 @@ namespace Portal.Identity
 
         private Identity()
         {
-#if UNITY_STANDALONE_WIN || (UNITY_ANDROID && UNITY_EDITOR_WIN) || (UNITY_IPHONE && UNITY_EDITOR_WIN)
             Application.quitting += OnQuit;
-#elif UNITY_IPHONE || UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
+#if UNITY_IPHONE || UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
             Application.deepLinkActivated += OnDeepLinkActivated;
             if (!string.IsNullOrEmpty(Application.absoluteURL))
             {
@@ -56,9 +54,9 @@ namespace Portal.Identity
         /// <param name="logoutRedirectUri">(Android, iOS and macOS only) The URL to which auth will redirect the browser after log out is complete</param>
         /// <param name="engineStartupTimeoutMs">(Windows only) Timeout time for waiting for the engine to start (in milliseconds)</param>
         public static UniTask<Identity> Init(
-#if UNITY_STANDALONE_WIN || (UNITY_ANDROID && UNITY_EDITOR_WIN) || (UNITY_IPHONE && UNITY_EDITOR_WIN)
+#if OPENFORT_USE_UWB
             string clientId, string redirectUri = null, string logoutRedirectUri = null, int engineStartupTimeoutMs = 4000
-#else
+#elif OPENFORT_USE_GREE
             string clientId, string redirectUri = null, string logoutRedirectUri = null
 #endif
         )
@@ -69,7 +67,7 @@ namespace Portal.Identity
                 Instance = new Identity();
                 // Wait until we get a ready signal
                 return Instance.Initialize(
-#if UNITY_STANDALONE_WIN || (UNITY_ANDROID && UNITY_EDITOR_WIN) || (UNITY_IPHONE && UNITY_EDITOR_WIN)
+#if OPENFORT_USE_UWB
                         engineStartupTimeoutMs
 #endif
                     )
@@ -100,16 +98,21 @@ namespace Portal.Identity
         }
 
         private async UniTask Initialize(
-#if UNITY_STANDALONE_WIN || (UNITY_ANDROID && UNITY_EDITOR_WIN) || (UNITY_IPHONE && UNITY_EDITOR_WIN)
+#if OPENFORT_USE_UWB
             int engineStartupTimeoutMs
 #endif
         )
         {
             try
             {
+#if OPENFORT_USE_UWB
+                webBrowserClient = new WebBrowserClient();
+#elif OPENFORT_USE_GREE
+                webBrowserClient = new GreeBrowserClient();
+#endif 
                 BrowserCommunicationsManager communicationsManager = new BrowserCommunicationsManager(webBrowserClient);
                 communicationsManager.OnReady += () => readySignalReceived = true;
-#if UNITY_STANDALONE_WIN || (UNITY_ANDROID && UNITY_EDITOR_WIN) || (UNITY_IPHONE && UNITY_EDITOR_WIN)
+#if OPENFORT_USE_UWB
                 await ((WebBrowserClient)webBrowserClient).Init(engineStartupTimeoutMs);
 #endif
                 identityImpl = new IdentityImpl(communicationsManager);
@@ -117,27 +120,25 @@ namespace Portal.Identity
             }
             catch (Exception ex)
             {
-                // Reset values
                 readySignalReceived = false;
                 Instance = null;
                 throw ex;
             }
         }
 
-#if UNITY_STANDALONE_WIN || (UNITY_ANDROID && UNITY_EDITOR_WIN) || (UNITY_IPHONE && UNITY_EDITOR_WIN)
         private void OnQuit()
         {
-            // Need to clean up UWB resources when quitting the game in the editor
-            // as the child engine process would still be alive
+#if OPENFORT_USE_UWB
             Debug.Log($"{TAG} Quitting the Player");
             ((WebBrowserClient)webBrowserClient).Dispose();
-        }
 #endif
+        }
 
         /// <summary>
         /// Sets the timeout time for waiting for each call to respond (in milliseconds).
         /// This only applies to functions that use the browser communications manager.
         /// </summary>
+        /// <param name="ms">Timeout duration in milliseconds</param>
         public void SetCallTimeout(int ms)
         {
             GetIdentityImpl().communicationsManager.SetCallTimeout(ms);
@@ -153,7 +154,7 @@ namespace Portal.Identity
         }
 
 
-#if UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
+#if OPENFORT_USE_GREE
         /// <summary>
         /// Connects the user into Identity via PKCE auth.
         /// </summary>
@@ -234,7 +235,6 @@ namespace Portal.Identity
             await GetIdentityImpl().RequestWalletSessionKey();
         }
 
-#if (UNITY_IPHONE && !UNITY_EDITOR) || (UNITY_ANDROID && !UNITY_EDITOR)
         /// <summary>
         /// Clears the underlying WebView resource cache
         /// Android: Note that the cache is per-application, so this will clear the cache for all WebViews used.
@@ -255,7 +255,6 @@ namespace Portal.Identity
         {
             GetIdentityImpl().ClearStorage();
         }
-#endif
 
         private IdentityImpl GetIdentityImpl()
         {

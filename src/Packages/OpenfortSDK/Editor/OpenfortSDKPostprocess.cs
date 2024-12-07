@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Openfort.OpenfortSDK.Editor
 {
-    internal class IdentityPostprocess : IPostprocessBuildWithReport
+    internal class OpenfortSDKPostprocess : IPostprocessBuildWithReport
     {
         public int callbackOrder => 0;
 

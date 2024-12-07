@@ -2,7 +2,7 @@ using System.IO;
 
 namespace Openfort.OpenfortSDK.Editor
 {
-    public static class FileHelpers
+    static class FileHelpers
     {
         /// <summary>
         /// Copies everything except .meta files in the source directory to the destination directory

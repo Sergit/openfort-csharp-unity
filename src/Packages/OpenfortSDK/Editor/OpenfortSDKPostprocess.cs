@@ -1,10 +1,4 @@
-#if UNITY_EDITOR
-
 using System.IO;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using System.Text;
-using System.Xml;
 using System;
 using UnityEditor;
 using UnityEditor.Build;
@@ -185,5 +179,3 @@ namespace Openfort.OpenfortSDK.Editor
         }
     }
 }
-
-#endif

@@ -1,6 +1,6 @@
 namespace Openfort.OpenfortSDK.Editor
 {
-    class OpenfortSDKAndroidProcessor : CommonSDKProcessorBase
+    class IdentitySDKProcessor : CommonSDKProcessorBase
     {
         protected override string GetDisplayName()
         {

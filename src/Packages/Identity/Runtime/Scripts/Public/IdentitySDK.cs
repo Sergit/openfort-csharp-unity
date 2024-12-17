@@ -18,12 +18,15 @@ using UnityEngine;
 
 namespace Portal.Identity
 {
-
-    public class Identity
+    public class IdentitySDK
     {
+        internal const string DISPLAY_NAME = "Identity";
+        internal const string PACKAGE_NAME = "com.portal.identity";
+        internal const string RESOURCES_RELATIVE_PATH = "Runtime/Resources";
+        internal const string DATA_RELATIVE_PATH = "PortalSDK/Runtime/Identity";
         private const string TAG = "[Identity]";
 
-        public static Identity Instance { get; private set; }
+        public static IdentitySDK Instance { get; private set; }
 
         private IWebBrowserClient webBrowserClient;
         // Keeps track of the latest received deeplink
@@ -33,7 +36,7 @@ namespace Portal.Identity
 
         public event OnAuthEventDelegate OnAuthEvent;
 
-        private Identity()
+        private IdentitySDK()
         {
             Application.quitting += OnQuit;
 #if UNITY_IPHONE || UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
@@ -53,7 +56,7 @@ namespace Portal.Identity
         /// <param name="redirectUri">(Android, iOS and macOS only) The URL to which auth will redirect the browser after authorization has been granted by the user</param>
         /// <param name="logoutRedirectUri">(Android, iOS and macOS only) The URL to which auth will redirect the browser after log out is complete</param>
         /// <param name="engineStartupTimeoutMs">(Windows only) Timeout time for waiting for the engine to start (in milliseconds)</param>
-        public static UniTask<Identity> Init(
+        public static UniTask<IdentitySDK> Init(
 #if OPENFORT_USE_UWB
             string clientId, string redirectUri = null, string logoutRedirectUri = null, int engineStartupTimeoutMs = 4000
 #elif OPENFORT_USE_GREE
@@ -64,7 +67,7 @@ namespace Portal.Identity
             if (Instance == null)
             {
                 Debug.Log($"{TAG} Initializing Identity...");
-                Instance = new Identity();
+                Instance = new IdentitySDK();
                 // Wait until we get a ready signal
                 return Instance.Initialize(
 #if OPENFORT_USE_UWB
@@ -108,7 +111,7 @@ namespace Portal.Identity
 #if OPENFORT_USE_UWB
                 webBrowserClient = new WebBrowserClient();
 #elif OPENFORT_USE_GREE
-                webBrowserClient = new GreeBrowserClient();
+                webBrowserClient = new GreeBrowserClient("PortalSDK/Runtime/Identity");
 #endif 
                 BrowserCommunicationsManager communicationsManager = new BrowserCommunicationsManager(webBrowserClient);
                 communicationsManager.OnReady += () => readySignalReceived = true;

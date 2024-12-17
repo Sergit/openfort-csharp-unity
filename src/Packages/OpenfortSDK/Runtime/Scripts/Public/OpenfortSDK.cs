@@ -18,9 +18,12 @@ using UnityEngine;
 
 namespace Openfort.OpenfortSDK
 {
-
     public class OpenfortSDK
     {
+        internal const string DISPLAY_NAME = "OpenfortSDK";
+        internal const string PACKAGE_NAME = "com.openfort.sdk";
+        internal const string RESOURCES_RELATIVE_PATH = "Runtime/Resources";
+        internal const string DATA_RELATIVE_PATH = "OpenfortSDK/Runtime/OpenfortSDK";
         private const string TAG = "[OpenfortSDK]";
 
         public static OpenfortSDK Instance { get; private set; }
@@ -111,7 +114,7 @@ namespace Openfort.OpenfortSDK
 #if OPENFORT_USE_UWB
                 webBrowserClient = new WebBrowserClient();
 #elif OPENFORT_USE_GREE
-                webBrowserClient = new GreeBrowserClient();
+                webBrowserClient = new GreeBrowserClient(DATA_RELATIVE_PATH);
 #endif 
                 BrowserCommunicationsManager communicationsManager = new BrowserCommunicationsManager(webBrowserClient);
                 communicationsManager.OnReady += () => readySignalReceived = true;

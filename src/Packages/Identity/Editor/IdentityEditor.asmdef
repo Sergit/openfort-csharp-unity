@@ -2,7 +2,8 @@
     "name": "Portal.Identity.Editor",
     "rootNamespace": "Portal.Identity.Editor",
     "references": [
-        "Openfort.Common.Editor"
+        "Openfort.Common.Editor",
+        "Portal.Identity.Runtime.Public"
     ],
     "includePlatforms": [
         "Editor"

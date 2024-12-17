@@ -1,20 +1,27 @@
-namespace Openfort.OpenfortSDK.Editor
+using Openfort.OpenfortSDK.Editor;
+
+namespace Portal.Identity.Editor
 {
     class IdentitySDKProcessor : CommonSDKProcessorBase
     {
         protected override string GetDisplayName()
         {
-            return "Identity";
+            return IdentitySDK.DISPLAY_NAME;
         }
 
         protected override string GetPackageName()
         {
-            return "com.portal.identity";
+            return IdentitySDK.PACKAGE_NAME;
         }
 
         protected override string GetResourcesRelativePath()
         {
-            return "Runtime/Resources";
+            return IdentitySDK.RESOURCES_RELATIVE_PATH;
+        }
+
+        protected override string GetDataRelativePath()
+        {
+            return IdentitySDK.DATA_RELATIVE_PATH;
         }
     }
 }

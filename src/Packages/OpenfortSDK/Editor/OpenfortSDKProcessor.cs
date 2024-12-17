@@ -4,17 +4,22 @@ namespace Openfort.OpenfortSDK.Editor
     {
         protected override string GetDisplayName()
         {
-            return "OpenfortSDK";
+            return OpenfortSDK.DISPLAY_NAME;
         }
 
         protected override string GetPackageName()
         {
-            return "com.openfort.sdk";
+            return OpenfortSDK.PACKAGE_NAME;
         }
 
         protected override string GetResourcesRelativePath()
         {
-            return "Runtime/Resources";
+            return OpenfortSDK.RESOURCES_RELATIVE_PATH;
+        }
+
+        protected override string GetDataRelativePath()
+        {
+            return OpenfortSDK.DATA_RELATIVE_PATH;
         }
     }
 }

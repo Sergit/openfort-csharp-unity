@@ -2,7 +2,8 @@
     "name": "Openfort.OpenfortSDK.Editor",
     "rootNamespace": "Openfort.OpenfortSDK.Editor",
     "references": [
-        "Openfort.Common.Editor"
+        "Openfort.Common.Editor",
+        "Openfort.OpenfortSDK.Runtime.Public"
     ],
     "includePlatforms": [
         "Editor"

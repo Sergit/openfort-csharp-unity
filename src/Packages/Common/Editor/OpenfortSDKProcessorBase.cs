@@ -15,6 +15,7 @@ namespace Openfort.OpenfortSDK.Editor
         protected abstract string GetDisplayName();
         protected abstract string GetPackageName();
         protected abstract string GetResourcesRelativePath();
+        protected abstract string GetDataRelativePath();
         
         void IPostGenerateGradleAndroidProject.OnPostGenerateGradleAndroidProject(string path)
         {
@@ -170,7 +171,7 @@ namespace Openfort.OpenfortSDK.Editor
             }
 
             // SDK folder in the data folder
-            string buildPath = $"{buildDataPath}/{GetDisplayName()}/Runtime/{GetDisplayName()}/";
+            string buildPath = $"{buildDataPath}/{GetDataRelativePath()}/";
 
             // Make sure it exists
             DirectoryInfo buildPathInfo = new DirectoryInfo(buildPath);

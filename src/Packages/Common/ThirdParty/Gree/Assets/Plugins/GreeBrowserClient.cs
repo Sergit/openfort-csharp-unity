@@ -12,14 +12,16 @@ namespace Openfort.Browser.Gree
     {
         private const string TAG = "[GreeBrowserClient]";
         private const string ANDROID_DATA_DIRECTORY = "android_asset";
-        private const string MAC_DATA_DIRECTORY = "/Resources/Data";
+        private const string SCHEME_FILE = "file://";
+        private const string MAC_DATA_DIRECTORY = "Resources/Data";
+        private const string HTML_FILE_NAME = "index.html";
         private const string MAC_EDITOR_RESOURCES_DIRECTORY = "Packages/com.openfort.sdk/Runtime/Resources";
         private readonly WebViewObject webViewObject;
         public event OnUnityPostMessageDelegate OnUnityPostMessage;
         public event OnUnityPostMessageDelegate OnAuthPostMessage;
         public event OnUnityPostMessageErrorDelegate OnPostMessageError;
 
-        public GreeBrowserClient()
+        public GreeBrowserClient(string dataRelativePath)
         {
 #if (UNITY_ANDROID && UNITY_EDITOR_OSX) || (UNITY_IPHONE && UNITY_EDITOR_OSX)
             Debug.LogWarning("Native Android and iOS WebViews cannot run in the Editor, so the macOS WebView is currently used to save your development time." + 
@@ -35,19 +37,20 @@ namespace Openfort.Browser.Gree
                 auth: InvokeOnAuthPostMessage,
                 log: InvokeOnLogMessage
             );
+
 #if UNITY_ANDROID && !UNITY_EDITOR
-            string filePath = Constants.SCHEME_FILE + ANDROID_DATA_DIRECTORY + Constants.OPENFORTSDK_DATA_DIRECTORY_NAME + Constants.OPENFORTSDK_HTML_FILE_NAME;
+            string filePath = $"{SCHEME_FILE}/{ANDROID_DATA_DIRECTORY}/{dataRelativePath}/{HTML_FILE_NAME}";
 #elif UNITY_EDITOR_OSX
-            string filePath = Constants.SCHEME_FILE + Path.GetFullPath(MAC_EDITOR_RESOURCES_DIRECTORY) + Constants.OPENFORTSDK_HTML_FILE_NAME;
+            string filePath = $"{SCHEME_FILE}/{Path.GetFullPath(MAC_EDITOR_RESOURCES_DIRECTORY)}/{HTML_FILE_NAME}";
 #elif UNITY_STANDALONE_OSX
-            string filePath = Constants.SCHEME_FILE + Path.GetFullPath(Application.dataPath) + MAC_DATA_DIRECTORY + Constants.OPENFORTSDK_DATA_DIRECTORY_NAME + Constants.OPENFORTSDK_HTML_FILE_NAME;
+            string filePath = $"{SCHEME_FILE}/{Path.GetFullPath(Application.dataPath)}/{MAC_DATA_DIRECTORY}/{dataRelativePath}/{HTML_FILE_NAME}";
             filePath = filePath.Replace(" ", "%20");
 #elif UNITY_IPHONE
-            string filePath = Path.GetFullPath(Application.dataPath) + Constants.OPENFORTSDK_DATA_DIRECTORY_NAME + Constants.OPENFORTSDK_HTML_FILE_NAME;
+            string filePath = $"{Path.GetFullPath(Application.dataPath)}/{dataRelativePath}/{HTML_FILE_NAME}";
 #elif UNITY_WEBGL
-            string filePath = Path.Combine(Application.streamingAssetsPath, "index.html");
+            string filePath = $"{Application.streamingAssetsPath}/{HTML_FILE_NAME}";
 #else
-            string filePath = Constants.SCHEME_FILE + Path.GetFullPath(Application.dataPath) + Constants.OPENFORTSDK_DATA_DIRECTORY_NAME + Constants.OPENFORTSDK_HTML_FILE_NAME;
+            string filePath = $"{SCHEME_FILE}/{Path.GetFullPath(Application.dataPath)}/{dataRelativePath}/{HTML_FILE_NAME}";
 #endif
             webViewObject.LoadURL(filePath);
         }

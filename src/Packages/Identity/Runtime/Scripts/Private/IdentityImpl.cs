@@ -15,6 +15,7 @@ namespace Portal.Identity
 {
     public class IdentityImpl
     {
+        private const string ANDROID_ACTIVITY_NAME = "com.openfort.unity.OpenfortActivity";
         private const string TAG = "[Identity Implementation]";
         public readonly IBrowserCommunicationsManager communicationsManager;
 
@@ -595,7 +596,7 @@ namespace Portal.Identity
         {
             AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
             AndroidJavaObject activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
-            AndroidJavaClass customTabLauncher = new AndroidJavaClass("com.portal.unity.PortalActivity");
+            AndroidJavaClass customTabLauncher = new AndroidJavaClass(ANDROID_ACTIVITY_NAME);
             customTabLauncher.CallStatic("startActivity", activity, url, new AndroidPKCECallback((PKCECallback)this));
         }
 #endif
@@ -631,7 +632,7 @@ namespace Portal.Identity
     {
         private PKCECallback callback;
 
-        public AndroidPKCECallback(PKCECallback callback) : base("com.portal.unity.PortalActivity$Callback")
+        public AndroidPKCECallback(PKCECallback callback) : base($"{ANDROID_ACTIVITY_NAME}$Callback")
         {
             this.callback = callback;
         }

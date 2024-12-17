@@ -21,6 +21,7 @@ namespace Openfort.OpenfortSDK
     public class OpenfortImpl
 #endif
     {
+        private const string ANDROID_ACTIVITY_NAME = "com.openfort.unity.OpenfortActivity";
         private const string TAG = "[Openfort Implementation]";
         public readonly IBrowserCommunicationsManager communicationsManager;
 
@@ -652,7 +653,7 @@ namespace Openfort.OpenfortSDK
         {
             AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
             AndroidJavaObject activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
-            AndroidJavaClass customTabLauncher = new AndroidJavaClass("com.openfort.unity.OpenfortActivity");
+            AndroidJavaClass customTabLauncher = new AndroidJavaClass(ANDROID_ACTIVITY_NAME);
             customTabLauncher.CallStatic("startActivity", activity, url, new AndroidCallback(this));
         }
 #endif
@@ -685,7 +686,7 @@ namespace Openfort.OpenfortSDK
     {
         private Callback callback;
 
-        public AndroidCallback(Callback callback) : base("com.openfort.unity.OpenfortActivity$Callback")
+        public AndroidCallback(Callback callback) : base($"{ANDROID_ACTIVITY_NAME}$Callback")
         {
             this.callback = callback;
         }

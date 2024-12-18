@@ -111,7 +111,7 @@ namespace Portal.Identity
 #if OPENFORT_USE_UWB
                 webBrowserClient = new WebBrowserClient();
 #elif OPENFORT_USE_GREE
-                webBrowserClient = new GreeBrowserClient("PortalSDK/Runtime/Identity");
+                webBrowserClient = new GreeBrowserClient(DATA_RELATIVE_PATH);
 #endif 
                 BrowserCommunicationsManager communicationsManager = new BrowserCommunicationsManager(webBrowserClient);
                 communicationsManager.OnReady += () => readySignalReceived = true;
